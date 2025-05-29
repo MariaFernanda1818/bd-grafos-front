@@ -272,6 +272,8 @@ export class AppComponent implements AfterViewInit {
 
         // 2) A partir del segundo paso, descontar combustible y colorear la arista
         this.currentFuel = step.fuel_restante;
+        const currentNode = this.graphNodes.find(n => n.id === step.node_id);
+
 
         // resetear el nodo anterior
         if (this.shipNodeId != null) {
@@ -302,6 +304,16 @@ export class AppComponent implements AfterViewInit {
                 this.errorMessage = 'Error al guardar combustible: ' + err.error;
               }
             });
+        }
+        if (currentNode?.group === 'station') {
+          // recargamos al máximo usando el fuel original de la nave
+          this.currentFuel = Number(this.currentFuel) + 100;
+          this.api
+          .updateFuel(this.shipPlacement!.shipId, this.currentFuel)
+          .subscribe({
+            next: () => console.log('Recarga persistida en BD'),
+            error: e => this.errorMessage = 'Error al recargar en servidor: ' + e.error
+          });
         }
       }, idx * 600);
     });
