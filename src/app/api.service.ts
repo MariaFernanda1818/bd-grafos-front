@@ -68,4 +68,12 @@ export class ApiService {
     updateFuel(shipId: number, fuel: number): Observable<void> {
       return this.http.patch<void>(`${this.base}/${shipId}/fuel`, { fuel });
     }
+
+    /** PATCH /api/graph/edge/:id */
+  updateEdgeWeight(edgeId: number, weight: number): Observable<void> {
+    return this.http.patch<void>(
+      `${this.base}/graph/edge/${edgeId}`,
+      { weight }
+    );
+  }
 }
